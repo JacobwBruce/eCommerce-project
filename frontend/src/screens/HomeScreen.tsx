@@ -21,7 +21,7 @@ const HomeScreen: React.FC = () => {
 
     useEffect(() => {
         const fetchProducts = async () => {
-            const { data }: any = await axios.get('/api/products');
+            const { data }: any = await axios.get('/api/products/');
 
             setProducts(data);
         };
