@@ -10,7 +10,7 @@ const Rating: React.FC<Props> = ({ value, text, color }) => {
     let stars: Array<JSX.Element> = [];
     for (let i = 0; i < 5; i++) {
         stars.push(
-            <span>
+            <span key={i}>
                 <i
                     style={{ color }}
                     className={

@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Card, Col, ListGroup, Row, Image } from 'react-bootstrap';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Rating from '../components/Rating';
-import products from '../products';
 
 interface Props {
     match: {
@@ -10,21 +10,17 @@ interface Props {
     };
 }
 
-interface Product {
-    _id: string;
-    name: string;
-    image: string;
-    description: string;
-    brand: string;
-    category: string;
-    price: number;
-    countInStock: number;
-    rating: number;
-    numReviews: number;
-}
-
 const ProductScreen: React.FC<Props> = ({ match }) => {
-    const product: any = products.find((p) => p._id === match.params.id);
+    const [product, setProduct] = useState<any>({});
+
+    useEffect(() => {
+        const fetchProduct = async () => {
+            const { data }: any = await axios.get(`/api/product/${match.params.id}`);
+            setProduct(data);
+        };
+
+        fetchProduct();
+    }, [match]);
 
     return (
         <>
