@@ -2,7 +2,6 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 dotenv.config();
 import users from './data/users';
-// @ts-ignore
 import products from './data/products';
 import User from './models/userModel';
 import Product from './models/productModel';

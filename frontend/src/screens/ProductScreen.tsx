@@ -15,7 +15,7 @@ const ProductScreen: React.FC<Props> = ({ match }) => {
 
     useEffect(() => {
         const fetchProduct = async () => {
-            const { data }: any = await axios.get(`/api/product/${match.params.id}`);
+            const { data }: any = await axios.get(`/api/products/${match.params.id}`);
             setProduct(data);
         };
 
