@@ -9,7 +9,7 @@ const router: Router = express.Router();
 // @access  Public
 router.get(
     '/',
-    asyncHandler(async (req, res) => {
+    asyncHandler(async (req: express.Request, res: express.Response) => {
         const products = await Product.find({});
 
         res.json(products);
@@ -21,11 +21,12 @@ router.get(
 // @access  Public
 router.get(
     '/:id',
-    asyncHandler(async (req, res) => {
+    asyncHandler(async (req: express.Request, res: express.Response) => {
         const product = await Product.findById(req.params.id);
 
         if (!product) {
-            res.status(404).json({ message: 'Product not found' });
+            res.status(404);
+            throw new Error('Product not found');
         }
 
         res.json(product);
