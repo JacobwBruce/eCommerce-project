@@ -4,15 +4,15 @@ import mongoose, { mongo } from 'mongoose';
 const reviewSchema = new mongoose.Schema(
     {
         name: {
-            trype: String,
+            type: String,
             required: true,
         },
         rating: {
-            trype: Number,
+            type: Number,
             required: true,
         },
         comment: {
-            trype: String,
+            type: String,
             required: true,
         },
     },
