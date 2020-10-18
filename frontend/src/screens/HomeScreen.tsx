@@ -32,7 +32,7 @@ const HomeScreen: React.FC = () => {
 
     return (
         <>
-            <h1>Latest Products</h1>
+            <h1 className='mt-3'>Latest Products</h1>
             {loading ? (
                 <Loader />
             ) : error ? (
