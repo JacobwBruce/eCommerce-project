@@ -9,11 +9,9 @@ import Loader from '../components/Loader';
 import Message from '../components/Message';
 import { RouteComponentProps } from 'react-router-dom';
 
-interface ChildComponentProps extends RouteComponentProps<any> {
-    /* other props for ChildComponent */
-}
+interface Props extends RouteComponentProps<any> {}
 
-const ProductScreen: React.FC<ChildComponentProps> = ({ history, match }) => {
+const ProductScreen: React.FC<Props> = ({ history, match }) => {
     const [qty, setQty] = useState<number>(1);
 
     const dispatch: Dispatch = useDispatch();

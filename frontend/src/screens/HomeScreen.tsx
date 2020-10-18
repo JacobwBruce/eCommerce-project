@@ -6,19 +6,7 @@ import { listProducts } from '../actions/productActions';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import Product from '../components/Product';
-
-interface ProductType {
-    _id: string;
-    name: string;
-    image: string;
-    description: string;
-    brand: string;
-    category: string;
-    price: number;
-    countInStock: number;
-    rating: number;
-    numReviews: number;
-}
+import ProductInterface from '../interfaces/ProductInterface';
 
 const HomeScreen: React.FC = () => {
     const dispatch: Dispatch<any> = useDispatch();
@@ -39,7 +27,7 @@ const HomeScreen: React.FC = () => {
                 <Message variant='danger'>{error}</Message>
             ) : (
                 <Row>
-                    {products.map((product: ProductType) => (
+                    {products.map((product: ProductInterface) => (
                         <Col sm={12} md={6} lg={4} xl={3} key={product._id}>
                             <Product product={product} />
                         </Col>
