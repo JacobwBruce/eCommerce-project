@@ -1,5 +1,4 @@
 export default interface ProductInterface {
-    product: ProductInterface;
     _id: string;
     name: string;
     image: string;
@@ -10,4 +9,5 @@ export default interface ProductInterface {
     countInStock: number;
     rating: number;
     numReviews: number;
+    qty?: number;
 }
