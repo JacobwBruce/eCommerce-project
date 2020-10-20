@@ -1,19 +1,23 @@
 import express from 'express';
 import productRoutes from './routes/productRoutes';
+import userRoutes from './routes/userRoutes';
 import connectDB from './config/db';
 import dotenv from 'dotenv';
 import { errorHandler, notFound } from './middleware/errorMiddleware';
 dotenv.config();
 
+connectDB();
+
 const app: express.Application = express();
 
-connectDB();
+app.use(express.json());
 
 app.get('/', (req: express.Request, res: express.Response) => {
     res.send('API is running....');
 });
 
 app.use('/api/products', productRoutes);
+app.use('/api/users', userRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
