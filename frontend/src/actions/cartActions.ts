@@ -3,7 +3,7 @@ import { Dispatch } from 'redux';
 import { CART_ADD_ITEM, CART_REMOVE_ITEM } from '../constants/cartConstants';
 import ProductInterface from '../interfaces/ProductInterface';
 
-export const addToCart = (id: string, qty: number) => async (dispatch: any, getState: any) => {
+export const addToCart = (id: string, qty: number) => async (dispatch: Dispatch, getState: any) => {
     const { data } = await axios.get(`/api/products/${id}`);
     dispatch({
         type: CART_ADD_ITEM,
