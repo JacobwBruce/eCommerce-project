@@ -23,6 +23,37 @@ export const authUser = asyncHandler(async (req: express.Request, res: express.R
     }
 });
 
+// @desc    Register a new user
+// @route   POST /api/users
+// @access  Public
+export const registerUser = asyncHandler(async (req: express.Request, res: express.Response) => {
+    const { name, email, password } = req.body;
+
+    const userExists = await User.findOne({ email });
+    // @ts-ignore
+    if (userExists) {
+        res.status(400);
+        throw new Error('User already exists');
+    }
+
+    const user = await User.create({
+        name,
+        email,
+        password,
+    });
+
+    if (user) {
+        res.status(201);
+        // @ts-ignore
+        delete user._doc.password;
+        // @ts-ignore
+        res.json({ ...user._doc, token: generateToken(user._id) });
+    } else {
+        res.status(400);
+        throw new Error('Invalid user data');
+    }
+});
+
 // @desc    Get user profile
 // @route   GET /api/users/profile
 // @access  Private
