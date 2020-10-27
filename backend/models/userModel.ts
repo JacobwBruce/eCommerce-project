@@ -1,6 +1,19 @@
 import mongoose, { HookNextFunction } from 'mongoose';
 import bcrypt from 'bcryptjs';
 
+interface UserDocument extends Document {
+    password?: string;
+    name: string;
+    email: string;
+    id: string;
+    _doc: {
+        password?: string;
+        name: string;
+        email: string;
+        id: string;
+    };
+}
+
 const userSchema = new mongoose.Schema(
     {
         name: {
@@ -41,6 +54,6 @@ userSchema.pre('save', async function (next: HookNextFunction) {
     this.password = await bcrypt.hash(this.password, salt);
 });
 
-const User = mongoose.model('user', userSchema);
+const User = mongoose.model<UserDocument & mongoose.Document>('user', userSchema);
 
 export default User;

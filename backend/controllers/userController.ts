@@ -13,9 +13,7 @@ export const authUser = asyncHandler(async (req: express.Request, res: express.R
     const user = await User.findOne({ email });
     // @ts-ignore
     if (user && (await user.matchPassword(password))) {
-        // @ts-ignore
         delete user._doc.password;
-        // @ts-ignore
         res.json({ ...user._doc, token: generateToken(user._id) });
     } else {
         res.status(401);
@@ -27,15 +25,15 @@ export const authUser = asyncHandler(async (req: express.Request, res: express.R
 // @route   POST /api/users
 // @access  Public
 export const registerUser = asyncHandler(async (req: express.Request, res: express.Response) => {
-    const { name, email, password } = req.body;
-
+    let { name, email, password } = req.body;
     const userExists = await User.findOne({ email });
-    // @ts-ignore
+
     if (userExists) {
         res.status(400);
         throw new Error('User already exists');
     }
 
+    // @ts-ignore
     const user = await User.create({
         name,
         email,
@@ -44,9 +42,7 @@ export const registerUser = asyncHandler(async (req: express.Request, res: expre
 
     if (user) {
         res.status(201);
-        // @ts-ignore
         delete user._doc.password;
-        // @ts-ignore
         res.json({ ...user._doc, token: generateToken(user._id) });
     } else {
         res.status(400);
@@ -61,9 +57,28 @@ export const getUserProfile = asyncHandler(async (req: UserRequest, res: express
     const user = await User.findById(req.user!._id);
 
     if (user) {
-        // @ts-ignore
         delete user._doc.password;
-        // @ts-ignore
+        res.json({ ...user._doc });
+    } else {
+        res.status(404);
+        throw new Error('User not found');
+    }
+});
+
+// @desc    Update user profile
+// @route   PUT /api/users/profile
+// @access  Private
+export const updateUserProfile = asyncHandler(async (req: UserRequest, res: express.Response) => {
+    const user = await User.findById(req.user!._id);
+
+    if (user) {
+        user.name = req.body.name || user.name;
+        user.email = req.body.email || user.email;
+        if (req.body.password) user.password = req.body.password;
+
+        const updatedUser = await user.save();
+
+        delete user._doc.password;
         res.json({ ...user._doc });
     } else {
         res.status(404);
