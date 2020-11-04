@@ -77,7 +77,7 @@ const RegisterScreen: FC<Props> = ({ location, history }) => {
                 </Form.Group>
 
                 <Form.Group controlId='confirmPassword'>
-                    <Form.Label>Email Address</Form.Label>
+                    <Form.Label>Confirm Password</Form.Label>
                     <Form.Control
                         type='password'
                         placeholder='Confirm Password'

@@ -1,6 +1,9 @@
 import { Dispatch } from 'redux';
 import axios from 'axios';
 import {
+    USER_DETAILS_FAIL,
+    USER_DETAILS_REQUEST,
+    USER_DETAILS_SUCCESS,
     USER_LOGIN_FAIL,
     USER_LOGIN_REQUEST,
     USER_LOGIN_SUCCESS,
@@ -58,7 +61,7 @@ export const register = (name: string, email: string, password: string) => async
             },
         };
 
-        const { data } = await axios.post('/api/users', { name, email, password, config });
+        const { data } = await axios.post('/api/users', { name, email, password }, config);
 
         dispatch({
             type: USER_REGISTER_SUCCESS,
@@ -69,6 +72,38 @@ export const register = (name: string, email: string, password: string) => async
     } catch (err) {
         dispatch({
             type: USER_REGISTER_FAIL,
+            payload:
+                err.response && err.response.data.message ? err.response.data.message : err.message,
+        });
+    }
+};
+
+export const getUserDetails = (id: string) => async (dispatch: Dispatch, getState: any) => {
+    try {
+        dispatch({
+            type: USER_DETAILS_REQUEST,
+        });
+
+        const {
+            userLogin: { userInfo },
+        } = getState();
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${userInfo.token}`,
+            },
+        };
+
+        const { data } = await axios.get(`/api/users/${id}`, config);
+
+        dispatch({
+            type: USER_DETAILS_SUCCESS,
+            payload: data,
+        });
+    } catch (err) {
+        dispatch({
+            type: USER_DETAILS_FAIL,
             payload:
                 err.response && err.response.data.message ? err.response.data.message : err.message,
         });
