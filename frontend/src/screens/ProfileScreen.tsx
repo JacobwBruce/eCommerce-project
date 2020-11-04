@@ -2,7 +2,7 @@ import React, { FC, useState, useEffect, FormEvent } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
-import { getUserDetails } from '../actions/userActions';
+import { getUserDetails, updateUserProfile } from '../actions/userActions';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 
@@ -25,6 +25,10 @@ const ProfileScreen: FC<Props> = ({ history }) => {
     const userLogin: any = useSelector((state) => state.userLogin);
     const { userInfo } = userLogin;
 
+    // @ts-ignore
+    const userUpdateProfile: any = useSelector((state) => state.userUpdateProfile);
+    const { success } = userUpdateProfile;
+
     useEffect(() => {
         if (!userInfo) {
             history.push('/login');
@@ -43,7 +47,7 @@ const ProfileScreen: FC<Props> = ({ history }) => {
         if (password !== confirmPassword) {
             setMessage('Passwords do not match');
         } else {
-            // dispatch complete profile
+            dispatch(updateUserProfile({ id: user._id, name, email, password }));
         }
     };
 
@@ -53,6 +57,7 @@ const ProfileScreen: FC<Props> = ({ history }) => {
                 <h2>User Profile</h2>
                 {message && <Message variant='danger'>{message}</Message>}
                 {error && <Message variant='danger'>{error}</Message>}
+                {success && <Message variant='success'>Profile Update</Message>}
                 {loading && <Loader />}
                 <Form onSubmit={submitHandler}>
                     <Form.Group controlId='name'>
