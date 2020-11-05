@@ -1,7 +1,12 @@
 import axios from 'axios';
 import { Dispatch } from 'redux';
-import { CART_ADD_ITEM, CART_REMOVE_ITEM } from '../constants/cartConstants';
+import {
+    CART_ADD_ITEM,
+    CART_REMOVE_ITEM,
+    CART_SAVE_SHIPPING_ADDRESS,
+} from '../constants/cartConstants';
 import ProductInterface from '../interfaces/ProductInterface';
+import ShippingAddressInterface from '../interfaces/ShippingAddressInterface';
 
 export const addToCart = (id: string, qty: number) => async (dispatch: Dispatch, getState: any) => {
     const { data } = await axios.get(`/api/products/${id}`);
@@ -19,4 +24,13 @@ export const removeFromCart = (item: ProductInterface) => (dispatch: Dispatch, g
     });
 
     localStorage.setItem('cartItems', JSON.stringify(getState().cart.cartItems));
+};
+
+export const saveShippingAddress = (data: ShippingAddressInterface) => (dispatch: Dispatch) => {
+    dispatch({
+        type: CART_SAVE_SHIPPING_ADDRESS,
+        payload: data,
+    });
+
+    localStorage.setItem('shippingAddress', JSON.stringify(data));
 };

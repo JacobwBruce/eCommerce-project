@@ -1,8 +1,13 @@
-import { CART_ADD_ITEM, CART_REMOVE_ITEM } from '../constants/cartConstants';
+import {
+    CART_ADD_ITEM,
+    CART_REMOVE_ITEM,
+    CART_SAVE_SHIPPING_ADDRESS,
+} from '../constants/cartConstants';
 import ProductInterface from '../interfaces/ProductInterface';
+import ShippingAddressInterface from '../interfaces/ShippingAddressInterface';
 
 export const cartReducer = (
-    state: { cartItems: Array<ProductInterface> },
+    state: { cartItems: Array<ProductInterface>; shppingAddress: ShippingAddressInterface },
     action: { type: string; payload: ProductInterface }
 ) => {
     switch (action.type) {
@@ -26,6 +31,12 @@ export const cartReducer = (
             return {
                 ...state,
                 cartItems: state.cartItems.filter((x) => x._id !== action.payload._id),
+            };
+
+        case CART_SAVE_SHIPPING_ADDRESS:
+            return {
+                ...state,
+                shippingAddress: action.payload,
             };
 
         default:
