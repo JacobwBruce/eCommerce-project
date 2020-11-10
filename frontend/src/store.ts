@@ -20,6 +20,8 @@ const reducer = combineReducers({
     userUpdateProfile: userUpdateProfileReducer,
 });
 
+export type RootState = ReturnType<typeof reducer>;
+
 const cartItemsFromStorage: any = JSON.parse(localStorage.getItem('cartItems')!) || [];
 const userInfoFromStorage: any = JSON.parse(localStorage.getItem('userInfo')!) || null;
 const shippingAddressFromStorage: any = JSON.parse(localStorage.getItem('shippingAddress')!) || {
