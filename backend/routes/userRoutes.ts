@@ -1,5 +1,4 @@
 import express, { Router } from 'express';
-import { register } from '../../frontend/src/serviceWorker';
 import {
     authUser,
     getUserProfile,
