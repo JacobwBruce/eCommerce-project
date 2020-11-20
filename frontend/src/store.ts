@@ -9,6 +9,7 @@ import {
     userRegisterReducer,
     userUpdateProfileReducer,
 } from './reducers/userReducers';
+import { orderCreatReducer } from './reducers/orderReducers';
 
 const reducer = combineReducers({
     productList: productListReducer,
@@ -18,6 +19,7 @@ const reducer = combineReducers({
     userRegister: userRegisterReducer,
     userDetails: userDetailsReducer,
     userUpdateProfile: userUpdateProfileReducer,
+    orderCreate: orderCreatReducer,
 });
 
 export type RootState = ReturnType<typeof reducer>;
