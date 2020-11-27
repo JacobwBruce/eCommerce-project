@@ -39,7 +39,7 @@ const PlaceOrderScreen: FC<Props> = ({ history }) => {
         if (success) {
             history.push(`/order/${order._id}`);
         }
-    }, [history, success]);
+    }, [history, success, order._id]);
 
     const placeOrderHandler = () => {
         dispatch(
