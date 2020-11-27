@@ -10,10 +10,14 @@ const orderSchema = new mongoose.Schema(
         orderItems: [
             {
                 name: { type: String, required: true },
-                qty: { type: String, required: true },
+                qty: { type: Number, required: true },
                 image: { type: String, required: true },
                 price: { type: Number, required: true },
-                _id: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Product' },
+                product: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    required: true,
+                    ref: 'Product',
+                },
             },
         ],
         shippingAddress: {
@@ -69,6 +73,6 @@ const orderSchema = new mongoose.Schema(
     }
 );
 
-const Order = mongoose.model('order', orderSchema);
+const Order = mongoose.model('Order', orderSchema);
 
 export default Order;
