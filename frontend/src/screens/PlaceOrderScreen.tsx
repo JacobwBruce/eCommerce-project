@@ -34,12 +34,11 @@ const PlaceOrderScreen: FC<Props> = ({ history }) => {
     //@ts-ignore
     const orderCreate = useSelector((state) => state.orderCreate);
     const { order, success, error } = orderCreate;
-
     useEffect(() => {
         if (success) {
             history.push(`/order/${order._id}`);
         }
-    }, [history, success, order._id]);
+    }, [history, success]);
 
     const placeOrderHandler = () => {
         dispatch(
