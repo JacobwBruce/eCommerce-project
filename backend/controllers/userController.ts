@@ -75,7 +75,7 @@ export const updateUserProfile = asyncHandler(async (req: UserRequest, res: expr
         user.name = req.body.name || user.name;
         user.email = req.body.email || user.email;
         if (req.body.password) user.password = req.body.password;
-
+        user.email = user.email.toLowerCase();
         const updatedUser = await user.save();
 
         delete updatedUser._doc.password;
@@ -133,7 +133,7 @@ export const updateUser = asyncHandler(async (req: UserRequest, res: express.Res
         user.name = req.body.name || user.name;
         user.email = req.body.email || user.email;
         user.isAdmin = req.body.isAdmin || false;
-
+        user.email = user.email.toLowerCase();
         const updatedUser = await user.save();
 
         delete updatedUser._doc.password;
