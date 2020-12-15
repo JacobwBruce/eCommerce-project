@@ -12,6 +12,7 @@ interface UserDocument extends Document {
         email: string;
         id: string;
     };
+    isAdmin?: boolean;
 }
 
 const userSchema = new mongoose.Schema(
