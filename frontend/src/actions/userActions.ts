@@ -5,6 +5,9 @@ import {
     USER_DETAILS_REQUEST,
     USER_DETAILS_RESET,
     USER_DETAILS_SUCCESS,
+    USER_LIST_FAIL,
+    USER_LIST_REQUEST,
+    USER_LIST_SUCCESS,
     USER_LOGIN_FAIL,
     USER_LOGIN_REQUEST,
     USER_LOGIN_SUCCESS,
@@ -143,6 +146,37 @@ export const updateUserProfile = (user: any) => async (dispatch: Dispatch, getSt
     } catch (err) {
         dispatch({
             type: USER_UPDATE_PROFILE_FAIL,
+            payload:
+                err.response && err.response.data.message ? err.response.data.message : err.message,
+        });
+    }
+};
+
+export const listUsers = () => async (dispatch: Dispatch, getState: any) => {
+    try {
+        dispatch({
+            type: USER_LIST_REQUEST,
+        });
+
+        const {
+            userLogin: { userInfo },
+        } = getState();
+
+        const config = {
+            headers: {
+                Authorization: `Bearer ${userInfo.token}`,
+            },
+        };
+
+        const { data } = await axios.get('/api/users', config);
+
+        dispatch({
+            type: USER_LIST_SUCCESS,
+            payload: data,
+        });
+    } catch (err) {
+        dispatch({
+            type: USER_LIST_FAIL,
             payload:
                 err.response && err.response.data.message ? err.response.data.message : err.message,
         });

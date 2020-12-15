@@ -7,7 +7,7 @@ import { listMyOrders } from '../actions/orderActions';
 import { getUserDetails, updateUserProfile } from '../actions/userActions';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
-import OrderInterface from '../interfaces/orderInterface';
+import OrderInterface from '../interfaces/OrderInterface';
 
 interface Props extends RouteComponentProps<any> {}
 
