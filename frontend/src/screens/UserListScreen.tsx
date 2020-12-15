@@ -3,7 +3,7 @@ import { Table, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { LinkContainer } from 'react-router-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
-import { listUsers } from '../actions/userActions';
+import { deleteUser, listUsers } from '../actions/userActions';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import UserInterface from '../interfaces/UserInterface';
@@ -19,15 +19,21 @@ const UserListScreen: FC<RouteComponentProps> = ({ history }) => {
     const userLogin = useSelector((state) => state.userLogin);
     const { userInfo } = userLogin;
 
+    //@ts-ignore
+    const userDelete = useSelector((state) => state.userDelete);
+    const { success: successDelete } = userDelete;
+
     useEffect(() => {
         if (userInfo && userInfo.isAdmin) {
             dispatch(listUsers());
         } else {
             history.push('/');
         }
-    }, [dispatch, history, userInfo]);
+    }, [dispatch, history, userInfo, successDelete]);
 
-    const deleteHandler = (id: string) => {};
+    const deleteHandler = (id: string) => {
+        if (window.confirm('Are you sure?')) dispatch(deleteUser(id));
+    };
 
     return (
         <>

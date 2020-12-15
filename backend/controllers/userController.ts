@@ -10,7 +10,7 @@ import generateToken from '../utils/generateToken';
 export const authUser = asyncHandler(async (req: express.Request, res: express.Response) => {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: email.toLowerCase() });
     // @ts-ignore
     if (user && (await user.matchPassword(password))) {
         delete user._doc.password;
@@ -36,7 +36,7 @@ export const registerUser = asyncHandler(async (req: express.Request, res: expre
     // @ts-ignore
     const user = await User.create({
         name,
-        email,
+        email: email.toLowerCase(),
         password,
     });
 
@@ -93,4 +93,19 @@ export const getUsers = asyncHandler(async (req: UserRequest, res: express.Respo
     const users = await User.find({});
 
     res.json(users);
+});
+
+// @desc    Delete user
+// @route   DELETE /api/users/:id
+// @access  Private / Admin
+export const deleteUser = asyncHandler(async (req: UserRequest, res: express.Response) => {
+    const user = await User.findById(req.params.id);
+
+    if (user) {
+        await user.remove();
+        res.json({ message: 'User removed' });
+    } else {
+        res.status(404);
+        throw new Error('User not found');
+    }
 });
