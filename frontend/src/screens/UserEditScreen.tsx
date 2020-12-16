@@ -1,11 +1,12 @@
 import React, { FC, useState, useEffect, FormEvent } from 'react';
-import { Button, Col, Form, Row } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { getUserDetails, register } from '../actions/userActions';
+import { getUserDetails, updateUser } from '../actions/userActions';
 import FormContainer from '../components/FormContainer';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
+import { USER_UPDATE_RESET } from '../constants/userContants';
 
 const UserEditScreen: FC<RouteComponentProps> = ({ match, history }) => {
     //@ts-ignore
@@ -21,18 +22,27 @@ const UserEditScreen: FC<RouteComponentProps> = ({ match, history }) => {
     const userDetails: any = useSelector((state) => state.userDetails);
     const { loading, error, user } = userDetails;
 
+    // @ts-ignore
+    const userUpdate: any = useSelector((state) => state.userUpdate);
+    const { loading: loadingUpdate, error: errorUpdate, success: successUpdate } = userUpdate;
+
     useEffect(() => {
-        if (!user.name || user._id !== userId) {
-            dispatch(getUserDetails(userId));
+        if (successUpdate) {
+            dispatch({ type: USER_UPDATE_RESET });
+            history.push('/admin/userlist');
         } else {
-            setName(user.name);
-            setEmail(user.email);
-            setIsAdmin(user.isAdmin);
+            if (!user.name || user._id !== userId) {
+                dispatch(getUserDetails(userId));
+            } else {
+                setName(user.name);
+                setEmail(user.email);
+                setIsAdmin(user.isAdmin);
+            }
         }
-    }, [dispatch, user, userId]);
+    }, [dispatch, history, user, userId, successUpdate]);
 
     const submitHandler = (e: FormEvent<HTMLElement>) => {
-        e.preventDefault();
+        dispatch(updateUser({ _id: userId, name, email, isAdmin }));
     };
 
     return (
@@ -42,7 +52,8 @@ const UserEditScreen: FC<RouteComponentProps> = ({ match, history }) => {
             </Link>
             <FormContainer>
                 <h1>Edit User</h1>
-
+                {loadingUpdate && <Loader />}
+                {errorUpdate && <Message variant='danger'>{errorUpdate}</Message>}
                 {loading ? (
                     <Loader />
                 ) : error ? (
