@@ -1,6 +1,20 @@
 import { timeStamp } from 'console';
 import mongoose, { mongo } from 'mongoose';
 
+interface ProductDocument extends Document {
+    _id: string;
+    name: string;
+    image: string;
+    description: string;
+    brand: string;
+    category: string;
+    price: number;
+    countInStock: number;
+    rating: number;
+    numReviews: number;
+    qty?: number;
+}
+
 const reviewSchema = new mongoose.Schema(
     {
         name: {
@@ -75,6 +89,6 @@ const productSchema = new mongoose.Schema(
     }
 );
 
-const Product = mongoose.model('Product', productSchema);
+const Product = mongoose.model<ProductDocument & mongoose.Document>('Product', productSchema);
 
 export default Product;
