@@ -3,9 +3,10 @@ import { Table, Button, Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { LinkContainer } from 'react-router-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
-import { deleteProduct, listProducts } from '../actions/productActions';
+import { createProduct, deleteProduct, listProducts } from '../actions/productActions';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
+import { PRODUCT_CREATE_RESET } from '../constants/productConstants';
 import ProductInterface from '../interfaces/ProductInterface';
 
 const ProductListScreen: FC<RouteComponentProps> = ({ history, match }) => {
@@ -23,20 +24,35 @@ const ProductListScreen: FC<RouteComponentProps> = ({ history, match }) => {
     const userLogin = useSelector((state) => state.userLogin);
     const { userInfo } = userLogin;
 
+    //@ts-ignore
+    const productCreate = useSelector((state) => state.productCreate);
+    const {
+        loading: loadingCreate,
+        error: errorCreate,
+        success: successCreate,
+        product: createdProduct,
+    } = productCreate;
+
     useEffect(() => {
-        if (userInfo && userInfo.isAdmin) {
-            dispatch(listProducts());
-        } else {
+        dispatch({ type: PRODUCT_CREATE_RESET });
+
+        if (!userInfo.isAdmin) {
             history.push('/login');
         }
-    }, [dispatch, history, userInfo, successDelete]);
+
+        if (successCreate) {
+            history.push(`/admin/product/${createdProduct._id}`);
+        } else {
+            dispatch(listProducts());
+        }
+    }, [dispatch, history, userInfo, successDelete, successCreate, createdProduct]);
 
     const deleteHandler = (id: string) => {
         if (window.confirm('Are you sure?')) dispatch(deleteProduct(id));
     };
 
     const createProductHandler = () => {
-        console.log('Create Product clicked');
+        dispatch(createProduct());
     };
 
     return (
@@ -53,6 +69,8 @@ const ProductListScreen: FC<RouteComponentProps> = ({ history, match }) => {
             </Row>
             {loadingDelete && <Loader />}
             {errorDelete && <Message variant='danger'>{errorDelete}</Message>}
+            {loadingCreate && <Loader />}
+            {errorCreate && <Message variant='danger'>{errorCreate}</Message>}
             {loading ? (
                 <Loader />
             ) : error ? (
