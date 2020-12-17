@@ -42,6 +42,7 @@ const UserEditScreen: FC<RouteComponentProps> = ({ match, history }) => {
     }, [dispatch, history, user, userId, successUpdate]);
 
     const submitHandler = (e: FormEvent<HTMLElement>) => {
+        e.preventDefault();
         dispatch(updateUser({ _id: userId, name, email, isAdmin }));
     };
 
