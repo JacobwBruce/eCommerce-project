@@ -2,10 +2,11 @@ import React, { FC, useState, useEffect, FormEvent } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { listProductDetails } from '../actions/productActions';
+import { listProductDetails, updateProduct } from '../actions/productActions';
 import FormContainer from '../components/FormContainer';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
+import { PRODUCT_UPDATE_RESET } from '../constants/productConstants';
 
 const ProductEditScreen: FC<RouteComponentProps> = ({ match, history }) => {
     //@ts-ignore
@@ -27,26 +28,46 @@ const ProductEditScreen: FC<RouteComponentProps> = ({ match, history }) => {
     const { loading, error, product } = productDetails;
 
     // @ts-ignore
-    const userUpdate: any = useSelector((state) => state.userUpdate);
-    const { loading: loadingUpdate, error: errorUpdate, success: successUpdate } = userUpdate;
+    const productUpdate: any = useSelector((state) => state.productUpdate);
+    const { loading: loadingUpdate, error: errorUpdate, success: successUpdate } = productUpdate;
+
+    // @ts-ignore
+    // const userUpdate: any = useSelector((state) => state.userUpdate);
+    // const { loading: loadingUpdate, error: errorUpdate, success: successUpdate } = userUpdate;
 
     useEffect(() => {
-        if (!product.name || product._id !== productId) {
-            dispatch(listProductDetails(productId));
+        if (successUpdate) {
+            dispatch({ type: PRODUCT_UPDATE_RESET });
+            history.push('/admin/productlist');
         } else {
-            setName(product.name);
-            setPrice(product.price);
-            setImage(product.image);
-            setBrand(product.brand);
-            setCategory(product.category);
-            setCountInStock(product.countInStock);
-            setDescription(product.description);
+            if (!product.name || product._id !== productId) {
+                dispatch(listProductDetails(productId));
+            } else {
+                setName(product.name);
+                setPrice(product.price);
+                setImage(product.image);
+                setBrand(product.brand);
+                setCategory(product.category);
+                setCountInStock(product.countInStock);
+                setDescription(product.description);
+            }
         }
-    }, [dispatch, history, productId, product]);
+    }, [dispatch, history, productId, product, successUpdate]);
 
     const submitHandler = (e: FormEvent<HTMLElement>) => {
         e.preventDefault();
-        // UPDATE PRODUCT
+        dispatch(
+            updateProduct({
+                _id: productId,
+                name,
+                price,
+                brand,
+                category,
+                countInStock,
+                description,
+                image,
+            })
+        );
     };
 
     return (
@@ -56,8 +77,8 @@ const ProductEditScreen: FC<RouteComponentProps> = ({ match, history }) => {
             </Link>
             <FormContainer>
                 <h1>Edit Product</h1>
-                {/* {loadingUpdate && <Loader />}
-                {errorUpdate && <Message variant='danger'>{errorUpdate}</Message>} */}
+                {loadingUpdate && <Loader />}
+                {errorUpdate && <Message variant='danger'>{errorUpdate}</Message>}
                 {loading ? (
                     <Loader />
                 ) : error ? (
