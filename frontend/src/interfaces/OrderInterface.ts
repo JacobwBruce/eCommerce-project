@@ -6,7 +6,7 @@ export default interface OrderInterface {
     isPaid: boolean;
     isDelivered: boolean;
     orderItems: Array<OrderInterface>;
-    user: string;
+    user: any;
     shippingAddress: {
         address: string;
         city: string;
