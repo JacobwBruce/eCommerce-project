@@ -7,6 +7,7 @@ import { listMyOrders } from '../actions/orderActions';
 import { getUserDetails, updateUserProfile } from '../actions/userActions';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
+import { USER_UPDATE_PROFILE_RESET } from '../constants/userContants';
 import OrderInterface from '../interfaces/OrderInterface';
 
 interface Props extends RouteComponentProps<any> {}
@@ -40,7 +41,8 @@ const ProfileScreen: FC<Props> = ({ history }) => {
         if (!userInfo) {
             history.push('/login');
         } else {
-            if (!user.name) {
+            if (!user.name || !user || success) {
+                dispatch({ type: USER_UPDATE_PROFILE_RESET });
                 dispatch(getUserDetails('profile'));
                 dispatch(listMyOrders());
             } else {
@@ -48,7 +50,7 @@ const ProfileScreen: FC<Props> = ({ history }) => {
                 setEmail(user.email);
             }
         }
-    }, [history, userInfo, dispatch, user]);
+    }, [history, userInfo, dispatch, user, success]);
 
     const submitHandler = (e: FormEvent<HTMLElement>) => {
         e.preventDefault();
