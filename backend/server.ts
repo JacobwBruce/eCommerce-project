@@ -29,7 +29,7 @@ app.get('/api/config/paypal', (req: express.Request, res: express.Response) =>
 );
 
 const __dirname = path.resolve();
-app.use('/uplaods', express.static(path.join(__dirname, '/uploads')));
+app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 
 app.use(notFound);
 app.use(errorHandler);

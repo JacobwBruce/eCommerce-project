@@ -17,7 +17,6 @@ import {
 } from '../constants/productConstants';
 import axios from 'axios';
 import { Dispatch } from 'redux';
-import ProductInterface from '../interfaces/ProductInterface';
 
 export const listProducts = () => async (
     dispatch: (arg0: { type: string; payload?: Object }) => void
