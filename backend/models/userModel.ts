@@ -1,11 +1,11 @@
 import mongoose, { HookNextFunction } from 'mongoose';
 import bcrypt from 'bcryptjs';
 
-interface UserDocument extends Document {
+export interface UserDocument extends Document {
     password?: string;
     name: string;
     email: string;
-    id: string;
+    _id: string;
     _doc: {
         password?: string;
         name: string;

@@ -1,5 +1,6 @@
 import { timeStamp } from 'console';
 import mongoose, { mongo } from 'mongoose';
+import { UserDocument } from './userModel';
 
 interface ProductDocument extends Document {
     _id: string;
@@ -13,6 +14,14 @@ interface ProductDocument extends Document {
     rating: number;
     numReviews: number;
     qty?: number;
+    reviews: Array<ReviewDocument>;
+}
+
+interface ReviewDocument {
+    name: string;
+    rating: number;
+    comment: string;
+    user: string;
 }
 
 const reviewSchema = new mongoose.Schema(
@@ -28,6 +37,11 @@ const reviewSchema = new mongoose.Schema(
         comment: {
             type: String,
             required: true,
+        },
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+            ref: 'User',
         },
     },
     {
