@@ -7,6 +7,9 @@ import Product from '../models/productModel';
 // @route   GET /api/products
 // @access  Public
 export const getProducts = asyncHandler(async (req: express.Request, res: express.Response) => {
+    const PAGE_SIZE = 12;
+    const page = Number(req.query.pageNumber) || 1;
+
     const keyword = req.query.keyword
         ? {
               name: {
@@ -17,9 +20,13 @@ export const getProducts = asyncHandler(async (req: express.Request, res: expres
         : {};
 
     //@ts-ignore
-    const products = await Product.find({ ...keyword });
+    const count = await Product.countDocuments({ ...keyword });
+    //@ts-ignore
+    const products = await Product.find({ ...keyword })
+        .limit(PAGE_SIZE)
+        .skip(PAGE_SIZE * (page - 1));
 
-    res.json(products);
+    res.json({ products, page, pages: Math.ceil(count / PAGE_SIZE) });
 });
 
 // @desc    Fetch single product

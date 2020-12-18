@@ -20,15 +20,16 @@ import {
 } from '../constants/productConstants';
 import axios from 'axios';
 import { Dispatch } from 'redux';
-import ReviewInterface from '../interfaces/ReviewInterface';
 
-export const listProducts = (keyword = '') => async (
+export const listProducts = (keyword = '', pageNumber = '') => async (
     dispatch: (arg0: { type: string; payload?: Object }) => void
 ) => {
     try {
         dispatch({ type: PRODUCT_LIST_REQUEST });
 
-        const { data } = await axios.get(`/api/products/?keyword=${keyword}`);
+        const { data } = await axios.get(
+            `/api/products/?keyword=${keyword}&pageNumber=${pageNumber}`
+        );
 
         dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data });
     } catch (err) {

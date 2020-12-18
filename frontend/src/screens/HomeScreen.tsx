@@ -8,19 +8,23 @@ import Loader from '../components/Loader';
 import Product from '../components/Product';
 import ProductInterface from '../interfaces/ProductInterface';
 import { RouteComponentProps } from 'react-router-dom';
+import Paginate from '../components/Paginate';
 
 const HomeScreen: React.FC<RouteComponentProps> = ({ match }) => {
     //@ts-ignore
     const keyword = match.params.keyword;
 
+    //@ts-ignore
+    const pageNumber = match.params.pageNumber || 1;
+
     const dispatch: Dispatch<any> = useDispatch();
 
     //@ts-ignore
     const productList = useSelector((state) => state.productList);
-    const { loading, error, products } = productList;
+    const { loading, error, products, pages, page } = productList;
     useEffect(() => {
-        dispatch(listProducts(keyword));
-    }, [dispatch, keyword]);
+        dispatch(listProducts(keyword, pageNumber));
+    }, [dispatch, keyword, pageNumber]);
 
     return (
         <>
@@ -30,13 +34,16 @@ const HomeScreen: React.FC<RouteComponentProps> = ({ match }) => {
             ) : error ? (
                 <Message variant='danger'>{error}</Message>
             ) : (
-                <Row>
-                    {products.map((product: ProductInterface) => (
-                        <Col sm={12} md={6} lg={4} xl={3} key={product._id}>
-                            <Product product={product} />
-                        </Col>
-                    ))}
-                </Row>
+                <>
+                    <Row>
+                        {products.map((product: ProductInterface) => (
+                            <Col sm={12} md={6} lg={4} xl={3} key={product._id}>
+                                <Product product={product} />
+                            </Col>
+                        ))}
+                    </Row>
+                    <Paginate pages={pages} page={page} keyword={keyword ? keyword : ''} />
+                </>
             )}
         </>
     );
