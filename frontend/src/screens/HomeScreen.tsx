@@ -7,7 +7,7 @@ import Message from '../components/Message';
 import Loader from '../components/Loader';
 import Product from '../components/Product';
 import ProductInterface from '../interfaces/ProductInterface';
-import { RouteComponentProps } from 'react-router-dom';
+import { Link, RouteComponentProps } from 'react-router-dom';
 import Paginate from '../components/Paginate';
 import ProductCarousel from '../components/ProductCarousel';
 import Meta from '../components/Meta';
@@ -31,7 +31,15 @@ const HomeScreen: React.FC<RouteComponentProps> = ({ match }) => {
     return (
         <>
             <Meta />
-            <div className='mt-3'>{!keyword && <ProductCarousel />}</div>
+            <div className='mt-3'>
+                {!keyword ? (
+                    <ProductCarousel />
+                ) : (
+                    <Link to='/' className='btn btn-light'>
+                        Go Back
+                    </Link>
+                )}
+            </div>
             <h1 className='mt-3'>Latest Products</h1>
             {loading ? (
                 <Loader />
