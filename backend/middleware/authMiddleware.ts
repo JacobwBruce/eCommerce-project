@@ -23,7 +23,6 @@ export const protect = asyncHandler(
                 throw new Error('Not authorized, token failed');
             }
         }
-
         //@ts-ignore
         if (!token) {
             res.status(401);

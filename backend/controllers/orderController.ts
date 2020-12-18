@@ -1,6 +1,5 @@
 import express from 'express';
 import asyncHandler from 'express-async-handler';
-import OrderPayment from '../interfaces/OrderPayment';
 import UserRequest from '../interfaces/UserRequest';
 import Order from '../models/orderModel';
 
@@ -58,7 +57,7 @@ export const getOrderById = asyncHandler(async (req: express.Request, res: expre
 // @access  Private
 export const updateOrderToPaid = asyncHandler(
     async (req: express.Request, res: express.Response) => {
-        const order: OrderPayment | null = await Order.findById(req.params.id);
+        const order = await Order.findById(req.params.id);
         if (order) {
             order.isPaid = true;
             order.paidAt = Date.now();
@@ -86,7 +85,7 @@ export const updateOrderToPaid = asyncHandler(
 // @route   GET /api/orders/myorders
 // @access  Private
 export const getMyOrders = asyncHandler(async (req: UserRequest, res: express.Response) => {
-    const orders: Array<OrderPayment> | null = await Order.find({ user: req.user!._id });
+    const orders = await Order.find({ user: req.user!._id });
     res.json(orders);
 });
 
@@ -97,3 +96,26 @@ export const getOrders = asyncHandler(async (req: UserRequest, res: express.Resp
     const orders = await Order.find({}).populate('user', 'id name');
     res.json(orders);
 });
+
+// @desc    update order to delivered
+// @route   GET /api/orders/:id/deliver
+// @access  Private/Admin
+export const updateOrderToDelivered = asyncHandler(
+    async (req: express.Request, res: express.Response) => {
+        const order = await Order.findById(req.params.id);
+        if (order) {
+            order.isDelivered = true;
+            order.deliveredAt = Date.now();
+
+            try {
+                const updatedOrder = await order.save();
+                res.json(updatedOrder);
+            } catch (er) {
+                console.log(er);
+            }
+        } else {
+            res.status(404);
+            throw new Error('Order not found');
+        }
+    }
+);

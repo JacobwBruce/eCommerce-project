@@ -1,23 +1,27 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Col, ListGroup, Row, Image, Card } from 'react-bootstrap';
+import { Col, ListGroup, Row, Image, Card, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { getOrderDetails, payOrder } from '../actions/orderActions';
+import { deliverOrder, getOrderDetails, payOrder } from '../actions/orderActions';
 import { PayPalButton } from 'react-paypal-button-v2';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import ProductInterface from '../interfaces/ProductInterface';
 import axios from 'axios';
-import { ORDER_PAY_RESET } from '../constants/orderConstants';
+import { ORDER_DELIVER_RESET, ORDER_PAY_RESET } from '../constants/orderConstants';
 
 interface Props extends RouteComponentProps<any> {}
 
-const OrderScreen: FC<Props> = ({ match }) => {
+const OrderScreen: FC<Props> = ({ match, history }) => {
     const orderId = match.params.id;
 
     const [sdkReady, setSdkReady] = useState(false);
 
     const dispatch = useDispatch();
+
+    //@ts-ignore
+    const userLogin = useSelector((state) => state.userLogin);
+    const { userInfo } = userLogin;
 
     //@ts-ignore
     const orderDetails = useSelector((state) => state.orderDetails);
@@ -26,6 +30,10 @@ const OrderScreen: FC<Props> = ({ match }) => {
     //@ts-ignore
     const orderPay = useSelector((state) => state.orderPay);
     const { loading: loadingPay, success: successPay } = orderPay;
+
+    //@ts-ignore
+    const orderDeliver = useSelector((state) => state.orderDeliver);
+    const { loading: loadingDeliver, success: successDeliver, error: errorDeliver } = orderDeliver;
 
     if (!loading) {
         const addDecimals = (num: number) => (Math.round(num * 100) / 100).toFixed(2);
@@ -39,6 +47,10 @@ const OrderScreen: FC<Props> = ({ match }) => {
     }
 
     useEffect(() => {
+        if (!userInfo) {
+            history.push('/login');
+        }
+
         const addPayPalScript = async () => {
             const { data: clientId } = await axios.get('/api/config/paypal');
             const script = document.createElement('script');
@@ -51,8 +63,9 @@ const OrderScreen: FC<Props> = ({ match }) => {
             document.body.appendChild(script);
         };
 
-        if (!order || successPay || order._id !== orderId) {
+        if (!order || successPay || successDeliver) {
             dispatch({ type: ORDER_PAY_RESET });
+            dispatch({ type: ORDER_DELIVER_RESET });
             dispatch(getOrderDetails(orderId));
         } else if (!order.isPaid) {
             // @ts-ignore
@@ -62,11 +75,14 @@ const OrderScreen: FC<Props> = ({ match }) => {
                 setSdkReady(true);
             }
         }
-    }, [order, orderId, dispatch, successPay]);
+    }, [order, orderId, dispatch, successPay, successDeliver]);
 
     const successPaymentHandler = (paymentResult: any) => {
-        console.log(paymentResult);
         dispatch(payOrder(orderId, paymentResult));
+    };
+
+    const deliverHandler = () => {
+        dispatch(deliverOrder(order));
     };
 
     return loading ? (
@@ -76,6 +92,8 @@ const OrderScreen: FC<Props> = ({ match }) => {
     ) : (
         <>
             <h1>Order {order._id}</h1>
+            {loadingDeliver && <Loader />}
+            {errorDeliver && <Message variant='danger'>{errorDeliver}</Message>}
             <Row>
                 <Col md={8}>
                     <ListGroup variant='flush'>
@@ -191,6 +209,18 @@ const OrderScreen: FC<Props> = ({ match }) => {
                                             onSuccess={successPaymentHandler}
                                         />
                                     )}
+                                </ListGroup.Item>
+                            )}
+
+                            {userInfo && userInfo.isAdmin && order.isPaid && !order.isDelivered && (
+                                <ListGroup.Item>
+                                    <Button
+                                        type='button'
+                                        className='btn btn-block'
+                                        onClick={deliverHandler}
+                                    >
+                                        Mark as Delivered
+                                    </Button>
                                 </ListGroup.Item>
                             )}
                         </ListGroup>

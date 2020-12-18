@@ -1,5 +1,27 @@
 import mongoose from 'mongoose';
 
+interface OrderDocument extends Document {
+    _id: string;
+    taxPrice: number;
+    shippingPrice: number;
+    totalPrice: number;
+    isDelivered?: boolean;
+    user: any;
+    shippingAddress: {
+        address: string;
+        city: string;
+        postalCode: string;
+        country: string;
+    };
+    paymentMethod: string;
+    createdAt: string;
+    updatedAt: string;
+    deliveredAt?: number;
+    paymentResult?: { id: any; status: any; update_time: any; email_address: any };
+    isPaid?: boolean;
+    paidAt?: number;
+}
+
 const orderSchema = new mongoose.Schema(
     {
         user: {
@@ -73,6 +95,6 @@ const orderSchema = new mongoose.Schema(
     }
 );
 
-const Order = mongoose.model('Order', orderSchema);
+const Order = mongoose.model<OrderDocument & mongoose.Document>('Order', orderSchema);
 
 export default Order;
