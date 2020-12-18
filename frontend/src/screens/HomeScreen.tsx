@@ -9,6 +9,7 @@ import Product from '../components/Product';
 import ProductInterface from '../interfaces/ProductInterface';
 import { RouteComponentProps } from 'react-router-dom';
 import Paginate from '../components/Paginate';
+import ProductCarousel from '../components/ProductCarousel';
 
 const HomeScreen: React.FC<RouteComponentProps> = ({ match }) => {
     //@ts-ignore
@@ -28,6 +29,7 @@ const HomeScreen: React.FC<RouteComponentProps> = ({ match }) => {
 
     return (
         <>
+            <div className='mt-3'>{!keyword && <ProductCarousel />}</div>
             <h1 className='mt-3'>Latest Products</h1>
             {loading ? (
                 <Loader />
