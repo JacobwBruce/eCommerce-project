@@ -10,6 +10,7 @@ import Message from '../components/Message';
 import { RouteComponentProps } from 'react-router-dom';
 import ReviewInterface from '../interfaces/ReviewInterface';
 import { PRODUCT_CREATE_REVIEW_RESET } from '../constants/productConstants';
+import Meta from '../components/Meta';
 
 interface Props extends RouteComponentProps<any> {}
 
@@ -70,6 +71,7 @@ const ProductScreen: React.FC<Props> = ({ history, match }) => {
                 <Message variant='danger'>{error}</Message>
             ) : (
                 <>
+                    <Meta title={product.name} description={product.description} />
                     <Row>
                         <Col md={6}>
                             <Image src={product.image} alt={product.name} fluid />
