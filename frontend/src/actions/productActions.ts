@@ -22,13 +22,13 @@ import axios from 'axios';
 import { Dispatch } from 'redux';
 import ReviewInterface from '../interfaces/ReviewInterface';
 
-export const listProducts = () => async (
+export const listProducts = (keyword = '') => async (
     dispatch: (arg0: { type: string; payload?: Object }) => void
 ) => {
     try {
         dispatch({ type: PRODUCT_LIST_REQUEST });
 
-        const { data } = await axios.get('/api/products/');
+        const { data } = await axios.get(`/api/products/?keyword=${keyword}`);
 
         dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data });
     } catch (err) {

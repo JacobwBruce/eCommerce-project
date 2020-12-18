@@ -7,16 +7,20 @@ import Message from '../components/Message';
 import Loader from '../components/Loader';
 import Product from '../components/Product';
 import ProductInterface from '../interfaces/ProductInterface';
+import { RouteComponentProps } from 'react-router-dom';
 
-const HomeScreen: React.FC = () => {
+const HomeScreen: React.FC<RouteComponentProps> = ({ match }) => {
+    //@ts-ignore
+    const keyword = match.params.keyword;
+
     const dispatch: Dispatch<any> = useDispatch();
 
     //@ts-ignore
     const productList = useSelector((state) => state.productList);
     const { loading, error, products } = productList;
     useEffect(() => {
-        dispatch(listProducts());
-    }, [dispatch]);
+        dispatch(listProducts(keyword));
+    }, [dispatch, keyword]);
 
     return (
         <>
