@@ -27,7 +27,9 @@
         "redux": "^4.0.5",
         "redux-devtools-extension": "^2.13.8",
         "redux-thunk": "^2.3.0",
-        "typescript": "^3.8.3"
+        "typescript": "^3.8.3",
+        "@types/react-helmet": "^6.1.0",
+        "@types/react-redux": "^7.1.9"
     },
     "scripts": {
         "start": "react-scripts start",
@@ -50,8 +52,5 @@
             "last 1 safari version"
         ]
     },
-    "devDependencies": {
-        "@types/react-helmet": "^6.1.0",
-        "@types/react-redux": "^7.1.9"
-    }
+    "devDependencies": {}
 }
