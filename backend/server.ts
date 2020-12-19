@@ -14,6 +14,12 @@ connectDB();
 
 const app: express.Application = express();
 
+app.use(function (req: express.Request, res: express.Response, next: CallableFunction) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    next();
+});
+
 app.use(express.json());
 
 if (process.env.NODE_ENV === 'development') {
