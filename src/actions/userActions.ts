@@ -40,7 +40,11 @@ export const login = (email: string, password: string) => async (dispatch: Dispa
             },
         };
 
-        const { data } = await axios.post('/api/users/login', { email, password, config });
+        const { data } = await axios.post(`${process.env.REACT_APP_URL}/api/users/login`, {
+            email,
+            password,
+            config,
+        });
 
         dispatch({
             type: USER_LOGIN_SUCCESS,
