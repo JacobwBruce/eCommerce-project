@@ -1,1 +1,1 @@
-web: node backend/server.ts
+web: node dist/server.js

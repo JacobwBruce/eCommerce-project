@@ -4,7 +4,8 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "start": "ts-node-dev --respawn backend/server.ts",
+        "start": "node dist/index.js",
+        "postinstall": "tsc",
         "server": "nodemon --exec ts-node backend/server.ts",
         "client": "npm start --prefix frontend",
         "dev": "concurrently \"yarn server\" \"yarn client\"",
@@ -12,6 +13,9 @@
         "data:import": "ts-node backend/seeder",
         "data:destroy": "ts-node backend/seeder -d",
         "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && yarn build --prefix frontend"
+    },
+    "engines": {
+        "node": "14.9.0"
     },
     "keywords": [],
     "author": "",
