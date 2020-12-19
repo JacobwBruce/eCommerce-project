@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "start": "node backend/server.js",
+        "start": "node dist/server.js",
         "postinstall": "tsc --outDir dist",
         "server": "nodemon --exec ts-node backend/server.ts",
         "client": "npm start --prefix frontend",
