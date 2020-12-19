@@ -8,17 +8,14 @@ import connectDB from './config/db';
 import dotenv from 'dotenv';
 import { errorHandler, notFound } from './middleware/errorMiddleware';
 import morgan from 'morgan';
+import cors from 'cors';
 dotenv.config();
 
 connectDB();
 
 const app: express.Application = express();
 
-app.use(function (req: express.Request, res: express.Response, next: CallableFunction) {
-    res.header('Access-Control-Allow-Origin', 'POST, PUT, GET, DELETE');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-    next();
-});
+app.use(cors());
 
 app.use(express.json());
 
