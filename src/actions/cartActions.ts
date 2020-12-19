@@ -10,7 +10,7 @@ import ProductInterface from '../interfaces/ProductInterface';
 import ShippingAddressInterface from '../interfaces/ShippingAddressInterface';
 
 export const addToCart = (id: string, qty: number) => async (dispatch: Dispatch, getState: any) => {
-    const { data } = await axios.get(`/api/products/${id}`);
+    const { data } = await axios.get(`${process.env.REACT_APP_URL}/api/products/${id}`);
     dispatch({
         type: CART_ADD_ITEM,
         payload: { ...data, qty },

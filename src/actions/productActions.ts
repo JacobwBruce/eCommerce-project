@@ -31,7 +31,7 @@ export const listProducts = (keyword = '', pageNumber = '') => async (
         dispatch({ type: PRODUCT_LIST_REQUEST });
 
         const { data } = await axios.get(
-            `/api/products/?keyword=${keyword}&pageNumber=${pageNumber}`
+            `${process.env.REACT_APP_URL}/api/products/?keyword=${keyword}&pageNumber=${pageNumber}`
         );
 
         dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data });
@@ -49,7 +49,7 @@ export const listProductDetails = (id: any) => async (
 ) => {
     try {
         dispatch({ type: PRODUCT_DETAILS_REQUEST });
-        const { data } = await axios.get(`/api/products/${id}`);
+        const { data } = await axios.get(`${process.env.REACT_APP_URL}/api/products/${id}`);
         dispatch({ type: PRODUCT_DETAILS_SUCCESS, payload: data });
     } catch (err) {
         dispatch({
@@ -76,7 +76,7 @@ export const deleteProduct = (id: string) => async (dispatch: Dispatch, getState
             },
         };
 
-        await axios.delete(`/api/products/${id}`, config);
+        await axios.delete(`${process.env.REACT_APP_URL}/api/products/${id}`, config);
 
         dispatch({
             type: PRODUCT_DELETE_SUCCESS,
@@ -106,7 +106,7 @@ export const createProduct = () => async (dispatch: Dispatch, getState: any) => 
             },
         };
 
-        const { data } = await axios.post('/api/products', {}, config);
+        const { data } = await axios.post(`${process.env.REACT_APP_URL}/api/products`, {}, config);
 
         dispatch({
             type: PRODUCT_CREATE_SUCCESS,
@@ -139,7 +139,11 @@ export const updateProduct = (product: any) => async (dispatch: Dispatch, getSta
             },
         };
 
-        const { data } = await axios.put(`/api/products/${product._id}`, product, config);
+        const { data } = await axios.put(
+            `${process.env.REACT_APP_URL}/api/products/${product._id}`,
+            product,
+            config
+        );
 
         dispatch({
             type: PRODUCT_UPDATE_SUCCESS,
@@ -174,7 +178,11 @@ export const createReview = (productId: string, review: any) => async (
             },
         };
 
-        await axios.post(`/api/products/${productId}/reviews`, review, config);
+        await axios.post(
+            `${process.env.REACT_APP_URL}/api/products/${productId}/reviews`,
+            review,
+            config
+        );
 
         dispatch({
             type: PRODUCT_CREATE_REVIEW_SUCCESS,
@@ -194,7 +202,7 @@ export const listTopProducts = () => async (
     try {
         dispatch({ type: PRODUCT_TOP_REQUEST });
 
-        const { data } = await axios.get('/api/products/top');
+        const { data } = await axios.get(`${process.env.REACT_APP_URL}/api/products/top`);
 
         dispatch({ type: PRODUCT_TOP_SUCCESS, payload: data });
     } catch (err) {
