@@ -5,13 +5,14 @@
     "main": "index.js",
     "scripts": {
         "start": "node dist/server.js",
+        "postinstall": "tsc",
         "server": "nodemon --exec ts-node backend/server.ts",
         "client": "npm start --prefix frontend",
         "dev": "concurrently \"yarn server\" \"yarn client\"",
         "test": "echo \"Error: no test specified\" && exit 1",
         "data:import": "ts-node backend/seeder",
         "data:destroy": "ts-node backend/seeder -d",
-        "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false yarn install --prefix frontend && yarn build --prefix frontend && tsc"
+        "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false yarn install"
     },
     "engines": {
         "node": "14.9.0"
